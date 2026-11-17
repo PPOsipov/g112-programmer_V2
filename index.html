@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101a27">
+<meta name="description" content="Офлайн-калькулятор геометрии и черновиков программ G112/G113 для FANUC.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<title>G112 Programmer</title>
+<style>
+:root{font-family:Inter,Segoe UI,Arial,sans-serif;color:#182230;background:#f3f5f8}*{box-sizing:border-box}body{margin:0;padding:24px}.app{max-width:1180px;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px}.brand{font-size:24px;font-weight:800;letter-spacing:-.7px}.brand span{color:#16856b}.sub{color:#667085;font-size:13px;margin-top:4px}.tag{font-size:12px;color:#166b58;background:#dff5ed;border-radius:20px;padding:7px 11px}.layout{display:grid;grid-template-columns:340px 1fr;gap:18px}.panel{background:white;border:1px solid #e2e7ee;border-radius:14px;padding:18px;box-shadow:0 4px 16px #172b4d08}.panel h2{font-size:16px;margin:0 0 14px}.field{margin:12px 0}.field label{display:block;font-size:12px;color:#526071;margin-bottom:6px}.field input,.field select{width:100%;padding:10px 11px;border:1px solid #d6dde6;border-radius:8px;background:#fff;font-size:14px;color:#182230}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.hint{font-size:11px;color:#7a8696;line-height:1.45;margin-top:5px}.btn{border:0;border-radius:9px;padding:11px 14px;font-weight:700;cursor:pointer}.primary{background:#167b65;color:#fff;width:100%;margin-top:8px}.secondary{background:#edf2f6;color:#263445}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}.tab{padding:8px 11px;border:1px solid #dce3ea;border-radius:8px;background:white;cursor:pointer;font-size:12px}.tab.active{background:#e4f4ef;border-color:#8bcbb7;color:#12634f;font-weight:700}.visual{display:grid;grid-template-columns:minmax(250px,1fr) minmax(260px,1fr);gap:14px}.canvas{background:#fbfcfd;border:1px solid #e5eaf0;border-radius:10px;min-height:300px;display:flex;align-items:center;justify-content:center}.canvas svg{width:100%;height:300px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stat{background:#f6f8fa;border-radius:9px;padding:10px}.stat small{display:block;color:#748091;font-size:11px}.stat b{font-size:15px}.section{margin-top:16px}.section h3{font-size:14px;margin:0 0 9px}.tablewrap{overflow:auto;max-height:260px;border:1px solid #e5eaf0;border-radius:9px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{padding:8px 10px;text-align:right;border-bottom:1px solid #edf0f3;white-space:nowrap}th{background:#f7f9fb;color:#5b6675;position:sticky;top:0}th:first-child,td:first-child{text-align:center}.code{background:#101a27;color:#d8e3ef;border-radius:10px;padding:14px;white-space:pre;overflow:auto;font:12px/1.65 Consolas,monospace;min-height:170px}.warning{margin-top:14px;padding:12px;border:1px solid #f0d49b;background:#fff8e8;border-radius:9px;color:#77551b;font-size:12px;line-height:1.5}.muted{color:#778394;font-size:12px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.check{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#536172}.check input{margin-top:2px}.footer{color:#8792a0;font-size:11px;margin-top:18px}@media(max-width:800px){body{padding:12px}.layout{grid-template-columns:1fr}.visual{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}}
+
+/* Mobile/PWA usability */
+html{min-height:100%;-webkit-text-size-adjust:100%}
+body{padding:clamp(8px,2.5vw,24px);padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+button,.btn,.tab{min-height:42px;touch-action:manipulation}
+.field input,.field select{min-height:44px;font-size:16px}
+.tabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:5px;scrollbar-width:thin}
+.tab{white-space:nowrap;flex:0 0 auto}
+.code{max-width:100%;-webkit-overflow-scrolling:touch}
+.tablewrap{max-width:100%;-webkit-overflow-scrolling:touch}
+@media(max-width:520px){
+ .panel{padding:13px;border-radius:12px}
+ .brand{font-size:21px}
+ .visual{grid-template-columns:minmax(0,1fr)}
+ .canvas{min-height:250px}
+ .canvas svg{height:250px}
+ .stats{grid-template-columns:1fr 1fr}
+ .grid2{gap:8px}
+ .actions .btn{flex:1 1 100%}
+}
+</style>
+</head>
+<body>
+<div class="app">
+ <div class="top"><div><div class="brand">G112 <span>PROGRAMMER</span></div><div class="sub">Расчёт геометрии и черновик программы для FANUC 0i-TF Plus</div></div><div class="tag">PWA · офлайн после установки</div></div>
+ <div class="layout">
+  <section class="panel">
+   <h2>1. Геометрия детали</h2>
+   <div class="tabs" id="shapeTabs">
+    <button class="tab active" data-shape="square">Квадрат</button><button class="tab" data-shape="hex">Шестигранник</button><button class="tab" data-shape="oct">Восьмигранник</button>
+    <button class="tab" data-shape="rect">Прямоугольник</button><button class="tab" data-shape="slot">Паз</button>
+    <button class="tab" data-shape="oneflat">Одна лыска</button><button class="tab" data-shape="twoflat">Две лыски</button>
+   </div>
+   <div id="geometryFields"><div class="field"><label>Размер между противоположными гранями S, мм</label><input id="size" type="number" min="0.001" step="0.001" value="27"></div><div class="field"><label>Угол первой вершины, °</label><input id="angle" type="number" step="1" value="0"></div></div>
+   <div class="grid2">
+    <div class="field"><label>Центр по X, мм</label><input id="centerX" type="number" step="0.001" value="0"></div>
+    <div class="field"><label>Центр по C, мм</label><input id="centerC" type="number" step="0.001" value="0"></div>
+   </div>
+   <div class="field"><label>Угол первой вершины, °</label><input id="angle" type="number" step="1" value="0"></div>
+   <div class="field"><label>Направление обхода</label><select id="direction"><option value="cw">По часовой стрелке</option><option value="ccw">Против часовой стрелки</option></select></div>
+   <h2 style="margin-top:22px">2. Параметры черновика</h2>
+   <div class="grid2">
+    <div class="field"><label>Глубина Z, мм</label><input id="depth" type="number" step="0.1" value="-5"></div>
+    <div class="field"><label>Подача F, мм/мин</label><input id="feed" type="number" min="0.001" step="1" value="100"></div>
+    <div class="field"><label>Обороты S</label><input id="rpm" type="number" min="1" step="10" value="2500"></div>
+    <div class="field"><label>Номер инструмента T</label><input id="tool" type="text" value="1010"></div>
+   </div>
+   <div class="field"><label>Безопасный X для подхода, мм</label><input id="safeX" type="number" step="0.1" value="55"></div>
+   <div class="field"><label>Подвод по Z перед контуром, мм</label><input id="approachZ" type="number" step="0.1" value="3"></div>
+   <div class="check"><input id="confirm" type="checkbox"><label for="confirm">Понимаю, что это геометрический черновик, а не готовая к запуску программа станка.</label></div>
+   <button class="btn primary" id="calc">Рассчитать контур</button>
+   <div class="hint">Модель координат пока условная: X в G112 считается диаметральным (X = 2x), C — линейной координатой. Это согласуется с вашим примером квадрата, но требует подтверждения по руководству именно вашего станка.</div>
+  </section>
+  <section class="panel">
+   <h2>3. Визуализация и координаты</h2>
+   <div class="visual">
+    <div class="canvas"><svg id="drawing" viewBox="0 0 400 300" role="img" aria-label="Чертёж контура"><g stroke="#dfe5ec" stroke-width="1"><path d="M200 15V285M25 150H375" stroke-dasharray="4 4"/></g><text x="380" y="145" font-size="10" fill="#8491a1">X</text><text x="207" y="15" font-size="10" fill="#8491a1">C</text><circle cx="200" cy="150" r="3" fill="#167b65"/></svg></div>
+    <div><div class="stats"><div class="stat"><small>Число вершин</small><b id="vertexCount">4</b></div><div class="stat"><small>Радиус R</small><b id="radius">19.092 мм</b></div><div class="stat"><small>Угол шага</small><b id="step">90°</b></div><div class="stat"><small>Габарит S</small><b id="gauge">27 мм</b></div></div><div class="hint" style="margin-top:12px">Для лысок зелёными показаны только прямые поверхности; пунктир — исходная окружность заготовки.</div></div>
+   </div>
+   <div class="section"><h3>Таблица координат</h3><div class="tablewrap"><table><thead><tr><th>№</th><th>X, мм</th><th>C, мм</th><th>Угол</th></tr></thead><tbody id="coords"></tbody></table></div></div>
+   <div class="section"><h3>Черновик программы</h3><div class="code" id="program">Нажмите «Рассчитать контур».</div><div class="actions"><button class="btn secondary" id="copy">Копировать программу</button><button class="btn secondary" id="download">Сохранить .nc</button></div></div>
+   <div class="warning"><b>Важно — перед запуском на станке:</b> здесь пока не реализованы коррекция G41/G42, расчёт траектории центра фрезы, многопроходная обработка, безопасные подводы/отводы и проверка станочных M-кодов. Для одной и двух лысок отображаются только прямые поверхности; исполняемый G-код намеренно не формируется до проверки безопасного входа/выхода и G41 на вашем станке. Не загружайте черновики в станок для обработки. Сверьте формат G112/G113, систему X/C и последовательность режимов с документацией производителя и проверенной рабочей программой.</div>
+  </section>
+ </div>
+ <div class="footer">Работает локально в браузере. Введённые значения не отправляются в интернет.</div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let shape='square',lastProgram='',lastPoints=[];
+const names={square:'Квадрат',hex:'Шестигранник',oct:'Восьмигранник',rect:'Прямоугольник',slot:'Прямоугольный паз',oneflat:'Одна лыска',twoflat:'Две лыски'};
+const fields={
+ square:`<div class="field"><label>Размер между противоположными гранями S, мм</label><input id="size" type="number" min="0.001" step="0.001" value="27"></div><div class="field"><label>Угол первой вершины, °</label><input id="angle" type="number" step="1" value="0"></div>`,
+ hex:`<div class="field"><label>Размер между противоположными гранями S, мм</label><input id="size" type="number" min="0.001" step="0.001" value="24"></div><div class="field"><label>Угол первой вершины, °</label><input id="angle" type="number" step="1" value="0"></div>`,
+ oct:`<div class="field"><label>Размер между противоположными гранями S, мм</label><input id="size" type="number" min="0.001" step="0.001" value="40"></div><div class="field"><label>Угол первой вершины, °</label><input id="angle" type="number" step="1" value="0"></div>`,
+ rect:`<div class="grid2"><div class="field"><label>Размер по X, мм</label><input id="width" type="number" min="0.001" step="0.001" value="40"></div><div class="field"><label>Размер по C, мм</label><input id="height" type="number" min="0.001" step="0.001" value="20"></div></div><div class="field"><label>Угол поворота, °</label><input id="angle" type="number" step="1" value="0"></div>`,
+ slot:`<div class="grid2"><div class="field"><label>Длина паза по X, мм</label><input id="length" type="number" min="0.001" step="0.001" value="40"></div><div class="field"><label>Ширина паза по C, мм</label><input id="width" type="number" min="0.001" step="0.001" value="10"></div></div><div class="field"><label>Угол поворота, °</label><input id="angle" type="number" step="1" value="0"></div><div class="hint">Пока паз прямоугольный, с острыми углами. Скруглённые концы добавим отдельно.</div>`,
+ oneflat:`<div class="grid2"><div class="field"><label>Диаметр окружности D, мм</label><input id="diameter" type="number" min="0.001" step="0.001" value="40"></div><div class="field"><label>От центра до лыски h, мм</label><input id="flat" type="number" min="0" step="0.001" value="15"></div></div><div class="field"><label>Угол направления к лыске, °</label><input id="angle" type="number" step="1" value="0"></div><div class="hint">0° — лыска справа по X; 90° — сверху по C. h — расстояние от центра до плоской поверхности.</div>`,
+ twoflat:`<div class="grid2"><div class="field"><label>Диаметр окружности D, мм</label><input id="diameter" type="number" min="0.001" step="0.001" value="40"></div><div class="field"><label>Расстояние между лыскими, мм</label><input id="across" type="number" min="0.001" step="0.001" value="30"></div></div><div class="field"><label>Угол направления к первой лыске, °</label><input id="angle" type="number" step="1" value="0"></div><div class="hint">Две параллельные лыски расположены симметрично относительно центра.</div>`
+};
+function bindInputs(){document.querySelectorAll('#geometryFields input').forEach(el=>el.addEventListener('input',calculate));}
+function setShape(next){shape=next;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.shape===shape));$('geometryFields').innerHTML=fields[shape];bindInputs();calculate();}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>setShape(b.dataset.shape)));
+['centerX','centerC','direction','depth','feed','rpm','tool','safeX','approachZ'].forEach(id=>$(id).addEventListener('input',calculate));
+$('calc').addEventListener('click',calculate);
+function fmt(v){return (Math.abs(v)<0.0005?0:v).toFixed(3)}
+function num(id){return Number($(id)?.value)}
+function rotate(x,y,deg){const a=deg*Math.PI/180;return {x:x*Math.cos(a)-y*Math.sin(a),y:x*Math.sin(a)+y*Math.cos(a)}}
+function makePoints(){
+ const cx=num('centerX')||0,cc=num('centerC')||0,ang=num('angle')||0,dir=$('direction').value==='cw'?-1:1;
+ let local=[],segments=[],R=null,step=null,dimension='',flatMode=false;
+ if(['square','hex','oct'].includes(shape)){
+  const n={square:4,hex:6,oct:8}[shape],S=num('size');if(!(S>0))throw Error('Введите размер S больше нуля.');
+  R=S/(2*Math.cos(Math.PI/n));step=360/n;dimension=fmt(S)+' мм';
+  for(let i=0;i<n;i++){const a=(ang+dir*i*step)*Math.PI/180;local.push({x:R*Math.cos(a),y:R*Math.sin(a),a:(ang+dir*i*step+3600)%360});}
+ }else if(shape==='rect'||shape==='slot'){
+  const w=shape==='rect'?num('width'):num('length'),h=shape==='rect'?num('height'):num('width');
+  if(!(w>0&&h>0))throw Error('Оба размера должны быть больше нуля.');
+  const corners=[[-w/2,-h/2],[w/2,-h/2],[w/2,h/2],[-w/2,h/2]];
+  local=corners.map(([x,y],i)=>{const q=rotate(x,y,ang);return {...q,a:i*90};});
+  if(dir<0)local.reverse();R=Math.hypot(w/2,h/2);dimension=fmt(w)+' × '+fmt(h)+' мм';
+ }else{
+  flatMode=true;
+  const D=num('diameter');if(!(D>0))throw Error('Введите диаметр больше нуля.');const r=D/2;
+  const h=shape==='oneflat'?num('flat'):num('across')/2;
+  if(!(h>=0&&h<r))throw Error('Расстояние до лыски должно быть меньше радиуса окружности.');
+  if(shape==='oneflat'&&h===0)throw Error('Лыска не должна проходить через центр окружности.');
+  if(shape==='twoflat'&&!(num('across')>0))throw Error('Расстояние между лыскими должно быть больше нуля.');
+  const beta=Math.acos(h/r)*180/Math.PI;
+  const point=a=>{const t=a*Math.PI/180;return {x:r*Math.cos(t),y:r*Math.sin(t),a:(a+3600)%360};};
+  const first=[point(ang-beta),point(ang+beta)];segments.push(dir<0?[...first].reverse():first);
+  if(shape==='twoflat'){const second=[point(ang+180-beta),point(ang+180+beta)];segments.push(dir<0?[...second].reverse():second);}
+  local=segments.flat();R=r;dimension=shape==='oneflat'?`D ${fmt(D)} / h ${fmt(h)} мм`:`D ${fmt(D)} / между лыскими ${fmt(num('across'))} мм`;
+ }
+ const convert=p=>({X:cx+2*p.x,C:cc+p.y,a:p.a});
+ return {pts:local.map(convert),R,step,dimension,flatMode,segments:segments.map(seg=>seg.map(convert))};
+}
+function calculate(){
+ try{
+  const {pts,R,step,dimension,flatMode,segments}=makePoints();lastPoints=pts;
+  $('vertexCount').previousElementSibling.textContent=flatMode?'Число проходов':'Число вершин';$('vertexCount').textContent=flatMode?String(segments.length):String(pts.length);$('radius').textContent=R===null?'—':fmt(R)+' мм';$('step').textContent=step===null?'—':step+'°';$('gauge').textContent=dimension;
+  $('coords').innerHTML=pts.map((p,i)=>`<tr><td>${flatMode?'Л'+(Math.floor(i/2)+1)+'-'+(i%2+1):i+1}</td><td>${fmt(p.X)}</td><td>${fmt(p.C)}</td><td>${fmt(p.a)}°</td></tr>`).join('');draw(pts,flatMode,segments);
+  const z=num('depth'),f=num('feed'),rpm=num('rpm'),tool=$('tool').value.trim()||'1010',safeX=num('safeX'),az=num('approachZ');
+  let lines=['(GEOMETRY DRAFT - VERIFY BEFORE USE)',`(SHAPE: ${names[shape]})`,'(ASSUMED G112: X=2*x, C=y)'];
+  if(flatMode){
+   lines.push('(FLAT GEOMETRY ONLY - NO MACHINE G-CODE GENERATED)','(Only straight flat segments are listed; no circular contour is traversed.)','(Lead-in, lead-out, G41/G42 and safe transitions require machine-specific verification.)');
+   segments.forEach((seg,i)=>lines.push(`(FLAT ${i+1}: START X${fmt(seg[0].X)} C${fmt(seg[0].C)} -> END X${fmt(seg[1].X)} C${fmt(seg[1].C)})`));
+   lines.push('(DO NOT RUN: executable code is intentionally withheld pending a verified flat-milling example.)');
+  }else{
+   if(shape==='slot')lines.push('(RECTANGULAR SLOT WITH SHARP CORNERS)');
+   lines.push('G98',`T${tool}`,`M13 P2 S${rpm}`,`G0 X${fmt(safeX)}`,`G0 Z${fmt(az)}`,`G1 Z${fmt(z)} F${fmt(f)}`,'G112',`G1 X${fmt(pts[0].X)} C${fmt(pts[0].C)} F${fmt(f)}`);
+   for(let i=1;i<pts.length;i++)lines.push(`G1 X${fmt(pts[i].X)} C${fmt(pts[i].C)}`);
+   lines.push(`G1 X${fmt(pts[0].X)} C${fmt(pts[0].C)}`,'G113','(RETRACT / STOP / COOLANT: MACHINE-SPECIFIC)','M5','M30');
+  }
+  lastProgram=lines.join('\n');$('program').textContent=lastProgram;
+ }catch(e){lastProgram='';$('program').textContent=e.message;$('coords').innerHTML='';$('vertexCount').textContent='—';$('radius').textContent='—';$('step').textContent='—';$('gauge').textContent='—';$('drawing').innerHTML='<g stroke="#dfe5ec"><path d="M200 15V285M25 150H375" stroke-dasharray="4 4"/></g><text x="200" y="150" text-anchor="middle" fill="#b54708" font-size="13">Проверьте размеры</text>';}
+}
+function draw(pts,flatMode=false,segments=[]){
+ const svg=$('drawing'),cx=200,cy=150,mx=Math.max(1,...pts.map(p=>Math.abs(p.X/2))),my=Math.max(1,...pts.map(p=>Math.abs(p.C))),scale=Math.min(115/mx,115/my,5),xy=p=>[cx+p.X/2*scale,cy-p.C*scale];let content='';
+ if(flatMode){
+  const r=num('diameter')/2,cx0=num('centerX')||0,cc0=num('centerC')||0;
+  content+=`<circle cx="${cx+cx0*scale}" cy="${cy-cc0*scale}" r="${r*scale}" fill="#f4f6f8" stroke="#aab5c2" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+  for(const seg of segments){const a=xy(seg[0]),b=xy(seg[1]);content+=`<path d="M${a[0].toFixed(1)} ${a[1].toFixed(1)} L${b[0].toFixed(1)} ${b[1].toFixed(1)}" fill="none" stroke="#16856b" stroke-width="4" stroke-linecap="round"/>`;}
+ }else{const q=pts.map(xy),d=q.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ')+' Z';content+=`<path d="${d}" fill="#dff5ed" stroke="#16856b" stroke-width="2.5" stroke-linejoin="round"/>`;}
+ svg.innerHTML=`<g stroke="#dfe5ec" stroke-width="1"><path d="M200 15V285M25 150H375" stroke-dasharray="4 4"/></g><text x="380" y="145" font-size="10" fill="#8491a1">X</text><text x="207" y="15" font-size="10" fill="#8491a1">C</text>${content}<circle cx="200" cy="150" r="2.5" fill="#344054"/>`;
+}
+$('copy').addEventListener('click',async()=>{if(!lastProgram)return;try{await navigator.clipboard.writeText(lastProgram);$('copy').textContent='Скопировано';setTimeout(()=>$('copy').textContent='Копировать программу',1500)}catch(e){alert('Не удалось скопировать. Выделите текст программы вручную.')}});
+$('download').addEventListener('click',()=>{if(!lastProgram)return;const blob=new Blob([lastProgram],{type:'text/plain;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='G112_draft.nc';a.click();URL.revokeObjectURL(a.href)});
+bindInputs();calculate();
+// Register offline cache when hosted over HTTPS (GitHub Pages).
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.warn('Service worker:', err));
+  });
+}
+</script>
+</body></html>
